@@ -17,7 +17,7 @@ namespace MailCleanUp
         private Timer _timer;
         private static bool _running;
         private const int MaxItemsToDeleteInOneRun = 1000;
-        private const string FolderListFileName = "FoldersToCleanUp.txt";
+        private const string FolderListFileName = @"C:\TEMP\FoldersToCleanUp.txt";
 
         private static Dictionary<string, int> _deleteDictionary;
         
@@ -64,7 +64,8 @@ namespace MailCleanUp
             }
             else
             {
-                MessageBox.Show(string.Format("Could not find file {0}.", FolderListFileName));
+                var currentDirectory = Directory.GetCurrentDirectory();
+                MessageBox.Show(string.Format("Could not find file {0} in {1}.", FolderListFileName, currentDirectory));
             }
         }
 
