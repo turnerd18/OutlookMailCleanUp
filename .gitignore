@@ -1,0 +1,4 @@
+MailCleanUp/*.pfx
+MailCleanUp/bin
+MailCleanUp/obj
+*.suo

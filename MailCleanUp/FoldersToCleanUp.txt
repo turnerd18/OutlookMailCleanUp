@@ -1,0 +1,9 @@
+﻿Error Spam|7
+EmailerNotifications|7
+DataServices|14
+SQL Admin|14
+SMG.Global.Notification|14
+WebAlertError|14
+CentralApps|14
+QuestionsTool|28
+PortalAdmin|14
