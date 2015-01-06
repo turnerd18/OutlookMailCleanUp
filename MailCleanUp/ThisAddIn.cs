@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -17,8 +18,8 @@ namespace MailCleanUp
         private Timer _timer;
         private static bool _running;
         private const int MaxItemsToDeleteInOneRun = 1000;
-        private const string FolderListFileName = @"C:\TEMP\FoldersToCleanUp.txt";
-
+        private const string FoldersToCleanUpKey = "FoldersToCleanUpPath";
+        
         private static Dictionary<string, int> _deleteDictionary;
         
         private void ThisAddIn_Startup(object sender, EventArgs e)
@@ -40,9 +41,11 @@ namespace MailCleanUp
         private static void InitializeDeleteDictionary()
         {
             _deleteDictionary = new Dictionary<string, int>();
-            if (File.Exists(FolderListFileName))
+
+            var folderListFileName = ConfigurationManager.AppSettings[FoldersToCleanUpKey] ?? string.Empty;
+            if (File.Exists(folderListFileName))
             {
-                using (var reader = new StreamReader(FolderListFileName))
+                using (var reader = new StreamReader(folderListFileName))
                 {
                     var body = reader.ReadToEnd();
                     var linesSplit =
@@ -65,7 +68,7 @@ namespace MailCleanUp
             else
             {
                 var currentDirectory = Directory.GetCurrentDirectory();
-                MessageBox.Show(string.Format("Could not find file {0} in {1}.", FolderListFileName, currentDirectory));
+                MessageBox.Show(string.Format("Could not find file {0} in {1}.", folderListFileName, currentDirectory));
             }
         }
 
