@@ -43,8 +43,13 @@ namespace MailCleanUp
             _deleteDictionary = new Dictionary<string, int>();
 
             var folderListFileName = ConfigurationManager.AppSettings[FoldersToCleanUpKey] ?? string.Empty;
-            if (File.Exists(folderListFileName))
+            try
             {
+                if (!File.Exists(folderListFileName))
+                {
+                    throw new Exception(string.Concat("Folders to delete file not found at ", folderListFileName));
+                }
+
                 using (var reader = new StreamReader(folderListFileName))
                 {
                     var body = reader.ReadToEnd();
@@ -54,21 +59,21 @@ namespace MailCleanUp
                             .Where(split => split.Length >= 2);
                     foreach (var lineSplit in linesSplit)
                     {
+                        var folderName = lineSplit[0];
                         int daysOldBeforeDelete;
-                        if (!int.TryParse(lineSplit[1], out daysOldBeforeDelete))
+                        if (!int.TryParse(lineSplit[1], out daysOldBeforeDelete) 
+                            || _deleteDictionary.ContainsKey(folderName))
                         {
                             continue;
                         }
 
-                        var folderName = lineSplit[0];
                         _deleteDictionary.Add(folderName, daysOldBeforeDelete);
                     }
                 }
             }
-            else
+            catch (Exception exception)
             {
-                var currentDirectory = Directory.GetCurrentDirectory();
-                MessageBox.Show(string.Format("Could not find file {0} in {1}.", folderListFileName, currentDirectory));
+                MessageBox.Show(exception.Message);
             }
         }
 
