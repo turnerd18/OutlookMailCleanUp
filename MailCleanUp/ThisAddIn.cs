@@ -94,6 +94,11 @@ namespace MailCleanUp
 
         private void DeleteOldMessages()
         {
+            DeleteOldMessages(MaxItemsToDeleteInOneRun);
+        }
+
+        public void DeleteOldMessages(int maxItemsToDelete)
+        {
             _running = true;
             var inbox = GetInbox();
             if (inbox == null)
@@ -118,7 +123,7 @@ namespace MailCleanUp
                 try
                 {
                     var oldestAllowedDate = DateTime.Today.AddDays(-kvp.Value);
-                    DeleteOldItems(folder, oldestAllowedDate, ref itemsDeleted);
+                    DeleteOldItems(folder, oldestAllowedDate, maxItemsToDelete, ref itemsDeleted);
                 }
                 finally
                 {
@@ -162,7 +167,7 @@ namespace MailCleanUp
             return inbox;
         }
 
-        private static void DeleteOldItems(Outlook.Folder folder, DateTime oldestAllowedDate, ref int itemsDeleted)
+        private static void DeleteOldItems(Outlook.Folder folder, DateTime oldestAllowedDate, int maxItemsToDelete, ref int itemsDeleted)
         {
             foreach (var mailItem in folder.Items.Cast<Outlook.MailItem>())
             {
@@ -173,7 +178,7 @@ namespace MailCleanUp
                         continue;
                     }
 
-                    if (itemsDeleted >= MaxItemsToDeleteInOneRun)
+                    if (itemsDeleted >= maxItemsToDelete)
                     {
                         break;
                     }

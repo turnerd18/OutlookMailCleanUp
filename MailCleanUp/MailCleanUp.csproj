@@ -161,9 +161,18 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="MailCleanupRibbon.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MailCleanupRibbon.Designer.cs">
+      <DependentUpon>MailCleanupRibbon.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <EmbeddedResource Include="MailCleanupRibbon.resx">
+      <DependentUpon>MailCleanupRibbon.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -212,7 +221,7 @@
     <ManifestKeyFile>MailCleanUp_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>F6F51AB163E9485DC6113C6E707C4CD2E83000A8</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>2062B8D3ACA505D4304C8884F5940E1D1423FA48</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
