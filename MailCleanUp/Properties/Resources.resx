@@ -114,4 +114,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Max_Items_Not_Valid_Integer" xml:space="preserve">
+    <value>Could not update max items to delete because it is not a valid integer.</value>
+  </data>
 </root>

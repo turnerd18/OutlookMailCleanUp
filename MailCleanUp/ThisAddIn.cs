@@ -92,12 +92,24 @@ namespace MailCleanUp
             Task.Run((Action) DeleteOldMessages);
         }
 
+        public string RunDeleteOldMessagesTask(int maxItemsToDelete)
+        {
+            if (_running)
+            {
+                return "Cannot start. Cleanup is already running.";
+            }
+
+            Task.Run(() => DeleteOldMessages(maxItemsToDelete));
+
+            return null;
+        }
+
         private void DeleteOldMessages()
         {
             DeleteOldMessages(MaxItemsToDeleteInOneRun);
         }
 
-        public void DeleteOldMessages(int maxItemsToDelete)
+        private void DeleteOldMessages(int maxItemsToDelete)
         {
             _running = true;
             var inbox = GetInbox();
@@ -131,7 +143,6 @@ namespace MailCleanUp
                 }
             }
 
-            //MessageBox.Show(string.Format("Deleted {0} emails.", itemsDeleted));
             _running = false; 
         }
 
