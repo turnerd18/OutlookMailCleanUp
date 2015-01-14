@@ -20,12 +20,8 @@ namespace MailCleanUp
         private const int MaxItemsToDeleteInOneRun = 1000;
         private const string FoldersToCleanUpKey = "FoldersToCleanUpPath";
         
-        private static Dictionary<string, int> _deleteDictionary;
-        
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
-            InitializeDeleteDictionary();
-
             _appNameSpace = Application.GetNamespace("MAPI");
             if (_appNameSpace == null)
             {
@@ -38,9 +34,9 @@ namespace MailCleanUp
             _timer.Start();
         }
 
-        private static void InitializeDeleteDictionary()
+        private static Dictionary<string, int> LoadDeleteDictionary()
         {
-            _deleteDictionary = new Dictionary<string, int>();
+            var deleteDictionary = new Dictionary<string, int>();
 
             var folderListFileName = ConfigurationManager.AppSettings[FoldersToCleanUpKey] ?? string.Empty;
             try
@@ -61,13 +57,13 @@ namespace MailCleanUp
                     {
                         var folderName = lineSplit[0];
                         int daysOldBeforeDelete;
-                        if (!int.TryParse(lineSplit[1], out daysOldBeforeDelete) 
-                            || _deleteDictionary.ContainsKey(folderName))
+                        if (!int.TryParse(lineSplit[1], out daysOldBeforeDelete)
+                            || deleteDictionary.ContainsKey(folderName))
                         {
                             continue;
                         }
 
-                        _deleteDictionary.Add(folderName, daysOldBeforeDelete);
+                        deleteDictionary.Add(folderName, daysOldBeforeDelete);
                     }
                 }
             }
@@ -75,6 +71,8 @@ namespace MailCleanUp
             {
                 MessageBox.Show(exception.Message);
             }
+
+            return deleteDictionary;
         }
 
         private void ThisAddIn_Shutdown(object sender, EventArgs e)
@@ -120,7 +118,8 @@ namespace MailCleanUp
             }
 
             var itemsDeleted = 0;
-            foreach (var kvp in _deleteDictionary)
+            var deleteDictionary = LoadDeleteDictionary();
+            foreach (var kvp in deleteDictionary)
             {
                 var folder =
                     inbox.Folders.Cast<Outlook.Folder>()

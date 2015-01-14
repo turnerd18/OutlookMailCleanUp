@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using MailCleanUp.Properties;
 using Microsoft.Office.Tools.Ribbon;
 
@@ -19,7 +15,7 @@ namespace MailCleanUp
 
         private void MailCleanupRibbon_Load(object sender, RibbonUIEventArgs e)
         {
-            _maxItemsToDelete = 1000;
+            _maxItemsToDelete = 10;
             MaxItemsBox.Text = MaxItemsToDeleteText;
         }
 
